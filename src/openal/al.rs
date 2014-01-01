@@ -327,7 +327,7 @@ pub mod listener {
     use super::types::*;
 
     // The master gain.
-        pub fn get_gain() -> ALfloat {
+    pub fn get_gain() -> ALfloat {
         unsafe {
             let mut value = 0.0;
             ffi::alGetListenerf(ffi::GAIN, &mut value);
@@ -336,12 +336,12 @@ pub mod listener {
     }
 
     /// Set the master gain (should be positive).
-        pub fn set_gain(value: ALfloat) {
+    pub fn set_gain(value: ALfloat) {
         unsafe { ffi::alListenerf(ffi::GAIN, value); }
     }
 
     // The position of the listener.
-        pub fn get_position() -> [ALfloat, ..3] {
+    pub fn get_position() -> [ALfloat, ..3] {
         unsafe {
             let mut values = [0.0, ..3];
             ffi::alGetListenerfv(ffi::GAIN, &mut values[0]);
@@ -350,12 +350,12 @@ pub mod listener {
     }
 
     /// Set the position of the listener.
-        pub fn set_position(values: [ALfloat, ..3]) {
+    pub fn set_position(values: [ALfloat, ..3]) {
         unsafe { ffi::alListenerfv(ffi::POSITION, &values[0]); }
     }
 
     // The velocity vector.
-        pub fn get_velocity() -> [ALfloat, ..3] {
+    pub fn get_velocity() -> [ALfloat, ..3] {
         unsafe {
             let mut values = [0.0, ..3];
             ffi::alGetListenerfv(ffi::VELOCITY, &mut values[0]);
@@ -364,12 +364,12 @@ pub mod listener {
     }
 
     /// Set the velocity vector.
-        pub fn set_velocity(values: [ALfloat, ..3]) {
+    pub fn set_velocity(values: [ALfloat, ..3]) {
         unsafe { ffi::alListenerfv(ffi::VELOCITY, &values[0]); }
     }
 
     // The orientation of the listener, expressed as 'at' and 'up' vectors.
-        pub fn get_orientation() -> ([ALfloat, ..3], [ALfloat, ..3]) {
+    pub fn get_orientation() -> ([ALfloat, ..3], [ALfloat, ..3]) {
         unsafe {
             let mut values = ([0.0, ..3], [0.0, ..3]);
             ffi::alGetListenerfv(ffi::ORIENTATION, cast::transmute(&mut values));
@@ -378,7 +378,7 @@ pub mod listener {
     }
 
     /// Set the orientation of the listener.
-        pub fn set_orientation(at: [ALfloat, ..3], up: [ALfloat, ..3]) {
+    pub fn set_orientation(at: [ALfloat, ..3], up: [ALfloat, ..3]) {
         unsafe {
             let values = (at, up);
             ffi::alListenerfv(ffi::ORIENTATION, cast::transmute(&values));
@@ -438,7 +438,7 @@ macro_rules! get_source(
 
 impl Source {
     /// Generate a single source object.
-        pub fn gen() -> Source {
+    pub fn gen() -> Source {
         unsafe {
             let mut id = 0;
             ffi::alGenSources(1, &mut id);
@@ -451,277 +451,277 @@ impl Source {
     /// If an error occurs, the source will not be deleted. The error can be
     /// detected using `get_error`. The source may be deleted if it is
     /// currently playing. In this case it will be stopped, then destroyed.
-    pub fn delete(self) {}
+pub fn delete(self) {}
 
     /// Play the buffers attached to the source.
-        pub fn play(&self) {
+    pub fn play(&self) {
         unsafe { ffi::alSourcePlay(self.id); }
     }
 
     // Returns `true` if the source is playing.
-        pub fn is_playing(&self) -> bool {
+    pub fn is_playing(&self) -> bool {
         unsafe { (get_source!(i, ffi::SOURCE_STATE)) as ALenum == ffi::PLAYING }
     }
 
     /// Pause the source.
-        pub fn pause(&self) {
+    pub fn pause(&self) {
         unsafe { ffi::alSourcePause(self.id); }
     }
 
     // Returns `true` if the source is paused.
-        pub fn is_paused(&self) -> bool {
+    pub fn is_paused(&self) -> bool {
         unsafe { (get_source!(i, ffi::SOURCE_STATE)) as ALenum == ffi::PAUSED }
     }
 
     /// Stop the source
-        pub fn stop(&self) {
+    pub fn stop(&self) {
         unsafe { ffi::alSourceStop(self.id); }
     }
 
     // Returns `true` if the source is stopped.
-        pub fn is_stopped(&self) -> bool {
+    pub fn is_stopped(&self) -> bool {
         unsafe { (get_source!(i, ffi::SOURCE_STATE)) as ALenum == ffi::STOPPED }
     }
 
     /// Rewind the source to the initial state.
-        pub fn rewind(&self) {
+    pub fn rewind(&self) {
         unsafe { ffi::alSourceRewind(self.id); }
     }
 
     // Returns `true` if the source is at the initial state.
-        pub fn is_initial(&self) -> bool {
+    pub fn is_initial(&self) -> bool {
         unsafe { (get_source!(i, ffi::SOURCE_STATE)) as ALenum == ffi::INITIAL }
     }
 
     /// Queue a single buffer on the source.
-        pub fn queue_buffer(&self, buffer: &Buffer) {
+    pub fn queue_buffer(&self, buffer: &Buffer) {
         unsafe { ffi::alSourceQueueBuffers(self.id, 1, &buffer.id); }
     }
 
     /// Queue the buffers on the source to be played in sequence.
-        pub fn queue_buffers(&self, buffers: &[Buffer]) {
+    pub fn queue_buffers(&self, buffers: &[Buffer]) {
         unsafe { ffi::alSourceQueueBuffers(self.id, buffers.len() as ALsizei, &buffers[0].id); }
     }
 
     /// Remove a single buffer from the queue.
-        pub fn unqueue_buffer(&self, buffer: &Buffer) {
+    pub fn unqueue_buffer(&self, buffer: &Buffer) {
         unsafe { ffi::alSourceUnqueueBuffers(self.id, 1, &buffer.id); }
     }
 
     /// Remove a set of buffers from the queue.
-        pub fn unqueue_buffers(&self, buffers: &[Buffer]) {
+    pub fn unqueue_buffers(&self, buffers: &[Buffer]) {
         unsafe { ffi::alSourceUnqueueBuffers(self.id, buffers.len() as ALsizei, &buffers[0].id); }
     }
 
     // The number of buffers queued on this source.
-        pub fn get_buffers_queued(&self) -> uint {
+    pub fn get_buffers_queued(&self) -> uint {
         unsafe { (get_source!(i, ffi::BUFFERS_QUEUED)) as uint }
     }
 
     // the number of buffers in the queue that have been processed.
-        pub fn get_buffers_processed(&self) -> uint {
+    pub fn get_buffers_processed(&self) -> uint {
         unsafe { (get_source!(i, ffi::BUFFERS_PROCESSED)) as uint }
     }
 
     // The pitch multiplier.
-        pub fn get_pitch(&self) -> ALfloat {
+    pub fn get_pitch(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::PITCH) }
     }
 
     /// Set the pitch multiplier (should be positive).
-        pub fn set_pitch(&self, value: ALfloat) {
+    pub fn set_pitch(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::PITCH, value); }
     }
 
     // The source gain.
-        pub fn get_gain(&self) -> ALfloat {
+    pub fn get_gain(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::GAIN) }
     }
 
     /// Set the source gain (should be positive).
-        pub fn set_gain(&self, value: ALfloat) {
+    pub fn set_gain(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::GAIN, value); }
     }
 
     /// Used with the Inverse Clamped Distance Model to set the distance where
     /// there will no longer be any attenuation of the source.
-        pub fn get_max_distance(&self) -> ALfloat {
+    pub fn get_max_distance(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::MAX_DISTANCE) }
     }
 
     /// Set the max distance for the source.
-        pub fn set_max_distance(&self, value: ALfloat) {
+    pub fn set_max_distance(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::MAX_DISTANCE, value); }
     }
 
     // The rolloff factor for the source.
-        pub fn get_rolloff_factor(&self) -> ALfloat {
+    pub fn get_rolloff_factor(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::ROLLOFF_FACTOR) }
     }
 
     /// Set the rolloff factor for the source (default is `1.0`).
-        pub fn set_rolloff_factor(&self, value: ALfloat) {
+    pub fn set_rolloff_factor(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::ROLLOFF_FACTOR, value); }
     }
 
     /// The distance under which the volume for the source would normally drop
     /// by half (before being influenced by rolloff factor or max distance).
-        pub fn get_reference_distance(&self) -> ALfloat {
+    pub fn get_reference_distance(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::REFERENCE_DISTANCE) }
     }
 
     /// Set the reference distance.
-        pub fn set_reference_distance(&self, value: ALfloat) {
+    pub fn set_reference_distance(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::REFERENCE_DISTANCE, value); }
     }
 
     // The minimum gain for the source.
-        pub fn get_min_gain(&self) -> ALfloat {
+    pub fn get_min_gain(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::MIN_GAIN) }
     }
 
     /// Set the minimum gain for the source.
-        pub fn set_min_gain(&self, value: ALfloat) {
+    pub fn set_min_gain(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::MIN_GAIN, value); }
     }
 
     // The maximum gain for the source.
-        pub fn get_max_gain(&self) -> ALfloat {
+    pub fn get_max_gain(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::MAX_GAIN) }
     }
 
     /// Set the maximum gain for the source.
-        pub fn set_max_gain(&self, value: ALfloat) {
+    pub fn set_max_gain(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::MAX_GAIN, value); }
     }
 
     // The gain when outside the oriented cone.
-        pub fn get_cone_outer_gain(&self) -> ALfloat {
+    pub fn get_cone_outer_gain(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::CONE_OUTER_GAIN) }
     }
 
     /// Set the gain when outside the oriented cone.
-        pub fn set_cone_outer_gain(&self, value: ALfloat) {
+    pub fn set_cone_outer_gain(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::CONE_OUTER_GAIN, value); }
     }
 
     // The gain when inside the oriented cone.
-        pub fn get_cone_inner_angle(&self) -> ALfloat {
+    pub fn get_cone_inner_angle(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::CONE_INNER_ANGLE) }
     }
 
     /// Set the gain when inside the oriented cone.
-        pub fn set_cone_inner_angle(&self, value: ALfloat) {
+    pub fn set_cone_inner_angle(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::CONE_INNER_ANGLE, value); }
     }
 
     // The outer angle of the sound cone, in degrees.
-        pub fn get_cone_outer_angle(&self) -> ALfloat {
+    pub fn get_cone_outer_angle(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::CONE_OUTER_ANGLE) }
     }
 
     /// Set the outer angle of the sound cone, in degrees. (default is `360.0`)
-        pub fn set_cone_outer_angle(&self, value: ALfloat) {
+    pub fn set_cone_outer_angle(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::CONE_OUTER_ANGLE, value); }
     }
 
     // The position of the source.
-        pub fn get_position(&self) -> [ALfloat, ..3] {
+    pub fn get_position(&self) -> [ALfloat, ..3] {
         unsafe { get_source!(fv, ffi::POSITION, 3) }
     }
 
     /// Set the position of the source.
-        pub fn set_position(&self, values: [ALfloat, ..3]) {
+    pub fn set_position(&self, values: [ALfloat, ..3]) {
         unsafe { ffi::alSourcefv(self.id, ffi::POSITION, &values[0]); }
     }
 
     // The velocity vector of the source.
-        pub fn get_velocity(&self) -> [ALfloat, ..3] {
+    pub fn get_velocity(&self) -> [ALfloat, ..3] {
         unsafe { get_source!(fv, ffi::VELOCITY, 3) }
     }
 
     /// Set the velocity vector of the source.
-        pub fn set_velocity(&self, values: [ALfloat, ..3]) {
+    pub fn set_velocity(&self, values: [ALfloat, ..3]) {
         unsafe { ffi::alSourcefv(self.id, ffi::VELOCITY, &values[0]); }
     }
 
     // The direction vector of the source.
-        pub fn get_direction(&self) -> [ALfloat, ..3] {
+    pub fn get_direction(&self) -> [ALfloat, ..3] {
         unsafe { get_source!(fv, ffi::DIRECTION, 3) }
     }
 
     /// Set the direction vector of the source.
-        pub fn set_direction(&self, values: [ALfloat, ..3]) {
+    pub fn set_direction(&self, values: [ALfloat, ..3]) {
         unsafe { ffi::alSourcefv(self.id, ffi::DIRECTION, &values[0]); }
     }
 
     // Returns `true` if the positions are relative to the listener.
-        pub fn is_relative(&self) -> bool {
+    pub fn is_relative(&self) -> bool {
         unsafe { (get_source!(i, ffi::SOURCE_RELATIVE)) as ALboolean == ffi::TRUE }
     }
 
     /// Set whether the positions are relative to the listener. (default is `false`)
-        pub fn set_relative(&self, value: bool) {
+    pub fn set_relative(&self, value: bool) {
         unsafe { ffi::alSourcei(self.id, ffi::SOURCE_RELATIVE, value as ALint); }
     }
 
     // The source type.
-        pub fn get_type(&self) -> SourceType {
+    pub fn get_type(&self) -> SourceType {
         unsafe { cast::transmute(get_source!(i, ffi::SOURCE_TYPE) as i32) }
     }
 
     /// Set the source type.
-        pub fn set_type(&self, value: SourceType) {
+    pub fn set_type(&self, value: SourceType) {
         unsafe { ffi::alSourcei(self.id, ffi::SOURCE_TYPE, value as ALint); }
     }
 
     // Returns `true` looping is turned on for this source.
-        pub fn is_looping(&self) -> bool {
+    pub fn is_looping(&self) -> bool {
         unsafe { (get_source!(i, ffi::LOOPING)) as ALboolean == ffi::TRUE }
     }
 
     /// Set looping on/off for this source.
-        pub fn set_looping(&self, value: bool) {
+    pub fn set_looping(&self, value: bool) {
         unsafe { ffi::alSourcei(self.id, ffi::LOOPING, value as ALint); }
     }
 
     // The attached buffer.
-        pub fn get_buffer(&self) -> Buffer {
+    pub fn get_buffer(&self) -> Buffer {
         unsafe { Buffer { id: get_source!(i, ffi::BUFFER) as ALuint } }
     }
 
     /// Set the attached buffer.
-        pub fn set_buffer(&self, buffer: Buffer) {
+    pub fn set_buffer(&self, buffer: Buffer) {
         unsafe { ffi::alSourcei(self.id, ffi::BUFFER, buffer.id as ALint); }
     }
 
     // The playback position, expressed in seconds.
-        pub fn get_sec_offset(&self) -> ALfloat {
+    pub fn get_sec_offset(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::SEC_OFFSET) }
     }
 
     /// Set the playback position, expressed in seconds.
-        pub fn set_sec_offset(&self, value: ALfloat) {
+    pub fn set_sec_offset(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::SEC_OFFSET, value); }
     }
 
     // The playback position, expressed in samples.
-        pub fn get_sample_offset(&self) -> ALfloat {
+    pub fn get_sample_offset(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::SAMPLE_OFFSET) }
     }
 
     /// Set the playback position, expressed in samples.
-        pub fn set_sample_offset(&self, value: ALfloat) {
+    pub fn set_sample_offset(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::SAMPLE_OFFSET, value); }
     }
 
     // The playback position, expressed in bytes.
-        pub fn get_byte_offset(&self) -> ALfloat {
+    pub fn get_byte_offset(&self) -> ALfloat {
         unsafe { get_source!(f, ffi::BYTE_OFFSET) }
     }
 
     /// Set the playback position, expressed in bytes.
-        pub fn set_byte_offset(&self, value: ALfloat) {
+    pub fn set_byte_offset(&self, value: ALfloat) {
         unsafe { ffi::alSourcef(self.id, ffi::BYTE_OFFSET, value); }
     }
 }
@@ -784,7 +784,7 @@ pub enum Format {
 
 impl Buffer {
     /// Generate a single buffer object.
-        pub fn gen() -> Buffer {
+    pub fn gen() -> Buffer {
         unsafe {
             let mut id = 0;
             ffi::alGenBuffers(1, &mut id);
@@ -794,7 +794,7 @@ impl Buffer {
 
     /// Delete the buffer and free the resources it uses. Buffers that are
     /// currently in use by a source cannot be deleted.
-        pub fn delete(self) {}
+    pub fn delete(self) {}
 
     /// Fill the buffer with PCM audio data.
         pub unsafe fn buffer_data<T>(&self, format: Format, data: &[T], freq: ALsizei) {
@@ -806,7 +806,7 @@ impl Buffer {
     }
 
     /// The frequency of the buffer in Hz.
-        pub fn get_frequency(&self) -> ALint {
+    pub fn get_frequency(&self) -> ALint {
         unsafe {
             let mut value = 0;
             ffi::alGetBufferi(self.id, ffi::FREQUENCY, &mut value);
@@ -815,7 +815,7 @@ impl Buffer {
     }
 
     /// The bit depth of the buffer.
-        pub fn get_bits(&self) -> ALint {
+    pub fn get_bits(&self) -> ALint {
         unsafe {
             let mut value = 0;
             ffi::alGetBufferi(self.id, ffi::BITS, &mut value);
@@ -824,7 +824,7 @@ impl Buffer {
     }
 
     /// The number of channels in the buffer.
-        pub fn get_channels(&self) -> ALint {
+    pub fn get_channels(&self) -> ALint {
         unsafe {
             let mut value = 0;
             ffi::alGetBufferi(self.id, ffi::CHANNELS, &mut value);
@@ -833,7 +833,7 @@ impl Buffer {
     }
 
     /// The size of the buffer in bytes.
-        pub fn get_size(&self) -> ALint {
+    pub fn get_size(&self) -> ALint {
         unsafe {
             let mut value = 0;
             ffi::alGetBufferi(self.id, ffi::SIZE, &mut value);
